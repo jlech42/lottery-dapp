@@ -8,6 +8,7 @@ const { interface, bytecode } = require('../compile');
 let accounts;
 let inbox;
 const INITIAL_STRING = 'Hi there';
+const UPDATE_STRING = 'Hi Justin!';
 
 beforeEach(async () => {
   // Get all accounts
@@ -29,5 +30,11 @@ describe('Inbox', () => {
   it('verify initial message', async () => {
     const message = await inbox.methods.message().call();
     assert.equal(message, INITIAL_STRING);
+  });
+
+  it('verify set message', async () => {
+    await inbox.methods.setMessage(UPDATE_STRING).send({ from: accounts[0] }); // Returns tx hash
+    const message = await inbox.methods.message().call();
+    assert.equal(message, UPDATE_STRING);
   });
 });
